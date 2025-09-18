@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: booking-service
+
+  data:
+    mongodb:
+      database: booking-store
+      uri: mongodb://admin:password@localhost:27017/
+      auto-index-creation: true
+
+
+#  javaformat:
+#    mapstruct:
+#      enabled: true
