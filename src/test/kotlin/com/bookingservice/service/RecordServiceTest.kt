@@ -5,6 +5,7 @@ import com.bookingservice.mapper.RecordMapperImpl
 import com.bookingservice.model.ClientEntity
 import com.bookingservice.model.RecordEntity
 import com.bookingservice.model.dto.RecordClientResponse
+import com.bookingservice.model.dto.RecordCreateRequest
 import com.bookingservice.model.dto.RecordInfo
 import com.bookingservice.repository.ClientRepository
 import com.bookingservice.repository.RecordRepository
@@ -59,7 +60,7 @@ class RecordServiceTest {
         val record = buildRecordEntity()
         `when`(clientRepository.existsByPhoneNumber("+79879997766")).thenReturn(true)
         `when`(recordRepository.save(record)).thenReturn(record)
-        recordService.createRecord("+79879997766", buildRecordInfo())
+        recordService.createRecord("+79879997766", buildRecordCreateRequest())
         val recordCaptor = ArgumentCaptor.forClass(RecordEntity::class.java)
         verify(recordRepository).save(recordCaptor.capture())
         assertEquals(record, recordCaptor.value)
@@ -69,7 +70,7 @@ class RecordServiceTest {
     fun createRecordErrorClient() {
         `when`(clientRepository.existsByPhoneNumber("+79879997766")).thenReturn(false)
         val err =
-            assertThrows<BookingServiceException> { recordService.createRecord("+79879997766", buildRecordInfo()) }
+            assertThrows<BookingServiceException> { recordService.createRecord("+79879997766", buildRecordCreateRequest()) }
         assertEquals("client not found", err.message)
         assertEquals(HttpStatus.NOT_FOUND, err.status)
         verify(recordRepository, times(0)).save(any())
@@ -84,6 +85,8 @@ class RecordServiceTest {
     private fun buildRecordInfo() =
         RecordInfo(recordDateTime = LocalDateTime.of(2025, 8, 8, 10, 0), companyName = "Реснички у Иришки")
 
+    private fun buildRecordCreateRequest() =
+        RecordCreateRequest(recordDateTime = LocalDateTime.of(2025, 8, 8, 10, 0), companyName = "Реснички у Иришки")
 
     private fun buildRecordEntity() = RecordEntity(
         companyName = "Реснички у Иришки",

@@ -1,5 +1,6 @@
 package com.bookingservice.controller
 
+import com.bookingservice.model.dto.RecordCreateRequest
 import com.bookingservice.model.dto.RecordInfo
 import com.bookingservice.service.RecordService
 import jakarta.validation.Valid
@@ -16,13 +17,13 @@ class RecordController(val recordService: RecordService) {
     fun getAllRecords(@RequestParam("phoneNumber") @NotEmpty phoneNumber: String) =
         ResponseEntity.ok(recordService.getAllRecords(phoneNumber))
 
-    @PostMapping
+    @PostMapping("/create")
     fun createRecord(
         @RequestParam @NotEmpty phoneNumber: String,
-        @Valid @RequestBody recordDto: RecordInfo
+        @Valid @RequestBody recordDto: RecordCreateRequest
     ): ResponseEntity<HttpStatus> {
         recordService.createRecord(phoneNumber, recordDto)
-        return ResponseEntity.ok(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.CREATED).build()
     }
 
 }

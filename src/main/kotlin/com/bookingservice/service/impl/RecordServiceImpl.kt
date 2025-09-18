@@ -3,7 +3,7 @@ package com.bookingservice.service.impl
 import com.bookingservice.exception.BookingServiceException
 import com.bookingservice.mapper.RecordMapper
 import com.bookingservice.model.dto.RecordClientResponse
-import com.bookingservice.model.dto.RecordInfo
+import com.bookingservice.model.dto.RecordCreateRequest
 import com.bookingservice.repository.ClientRepository
 import com.bookingservice.repository.RecordRepository
 import com.bookingservice.service.RecordService
@@ -26,7 +26,7 @@ class RecordServiceImpl(
         return recordMapper.mapToResponse(client, records)
     }
 
-    override fun createRecord(phoneNumber: String, recordDto: RecordInfo) {
+    override fun createRecord(phoneNumber: String, recordDto: RecordCreateRequest) {
         if (!clientRepository.existsByPhoneNumber(phoneNumber)) {
             throw BookingServiceException(HttpStatus.NOT_FOUND, "client not found")
         }

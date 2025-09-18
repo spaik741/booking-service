@@ -3,6 +3,7 @@ package com.bookingservice.mapper
 import com.bookingservice.model.ClientEntity
 import com.bookingservice.model.RecordEntity
 import com.bookingservice.model.dto.RecordClientResponse
+import com.bookingservice.model.dto.RecordCreateRequest
 import com.bookingservice.model.dto.RecordInfo
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
@@ -28,5 +29,5 @@ abstract class RecordMapper {
     }
 
     @Mapping(target = "phoneNumber", source = "phoneNumber")
-    abstract fun mapToEntity(phoneNumber: String, recordDto: RecordInfo): RecordEntity?
+    abstract fun mapToEntity(phoneNumber: String, recordDto: RecordCreateRequest): RecordEntity?
 }

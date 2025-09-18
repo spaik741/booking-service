@@ -2,6 +2,7 @@ package com.bookingservice.controller
 
 import com.bookingservice.exception.BookingServiceException
 import com.bookingservice.model.dto.RecordClientResponse
+import com.bookingservice.model.dto.RecordCreateRequest
 import com.bookingservice.model.dto.RecordInfo
 import com.bookingservice.service.RecordService
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -63,16 +64,19 @@ class RecordControllerTest {
         assertEquals("/v1/record", json["instance"].textValue())
     }
 
-
+    @Test
     fun createRecord() {
-        mockMvc.perform(
+        val result = mockMvc.perform(
             post("/v1/record/create")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(buildRecordClientResponse()))
-                .param("+79879997766")
-        )
+                .content(objectMapper.writeValueAsString(buildRecordCreateRequest()))
+                .param("phoneNumber", "+79879997766")
+        ).andReturn()
+        assertEquals(201, result.response.status)
     }
 
+    private fun buildRecordCreateRequest() =
+        RecordCreateRequest(recordDateTime = LocalDateTime.of(2025, 8, 8, 10, 0), companyName = "Реснички у Иришки")
 
     private fun buildRecordClientResponse(): RecordClientResponse {
         val recordDto = RecordInfo(LocalDateTime.of(2025, 8, 8, 10, 0), "Ноготочки у Сафиры")
