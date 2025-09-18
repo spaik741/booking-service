@@ -100,7 +100,8 @@ class RecordServiceTest {
             lastName = "Дмитриев",
             phoneNumber = "+79879997766",
             age = 18,
-            middleName = "Дмитриеевич"
+            middleName = "Дмитриеевич",
+            createdDate = LocalDateTime.of(2025, 8, 8, 10, 0)
         )
 
 }
