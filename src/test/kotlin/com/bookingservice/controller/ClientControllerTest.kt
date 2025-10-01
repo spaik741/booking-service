@@ -29,12 +29,14 @@ class ClientControllerTest {
     @MockitoBean
     private lateinit var clientService: ClientService
 
+    private val PATH = "/v1/client"
+
     @Test
     fun create() {
         val createRequest = buildClientCreateRequest()
         Mockito.doNothing().`when`(clientService).create(createRequest)
         val result = mockMvc.perform(
-            post("/v1/client/create")
+            post("$PATH/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createRequest))
         )
@@ -46,7 +48,7 @@ class ClientControllerTest {
     fun createNotValidBody() {
         val createRequest = ClientCreateRequest()
         val result = mockMvc.perform(
-            post("/v1/client/create")
+            post("$PATH/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createRequest))
         )
@@ -59,7 +61,7 @@ class ClientControllerTest {
         val clientInfo = buildClientInfo()
         Mockito.`when`(clientService.findClient("+79879997766")).thenReturn(clientInfo)
         val result = mockMvc.perform(
-            get("/v1/client")
+            get("$PATH/info")
                 .param("phoneNumber", "+79879997766")
         )
             .andReturn()
@@ -69,11 +71,10 @@ class ClientControllerTest {
 
     @Test
     fun getInfoNotFound() {
-        val clientInfo = buildClientInfo()
         Mockito.`when`(clientService.findClient("+79879997766"))
             .thenThrow(BookingServiceException(HttpStatus.NOT_FOUND, "not client found by phoneNumber: +79879997766"))
         val result = mockMvc.perform(
-            get("/v1/client")
+            get("$PATH/info")
                 .param("phoneNumber", "+79879997766")
         )
             .andReturn()
@@ -81,7 +82,7 @@ class ClientControllerTest {
         assertEquals(404, result.response.status)
         assertEquals("Not Found", json["title"].textValue())
         assertEquals("not client found by phoneNumber: +79879997766", json["detail"].textValue())
-        assertEquals("/v1/client", json["instance"].textValue())
+        assertEquals("/v1/client/info", json["instance"].textValue())
     }
 
     private fun buildClientInfo() = ClientInfo(

@@ -31,12 +31,14 @@ class RecordControllerTest {
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
+    private val PATH = "/v1/client/record"
+
     @Test
     fun getAllRecords() {
         val recordDto = buildRecordClientResponse()
         Mockito.`when`(recordService.getAllRecords("+79879997766")).thenReturn(recordDto)
         val result = mockMvc.perform(
-            get("/v1/record")
+            get(PATH)
                 .param("phoneNumber", "+79879997766")
         )
             .andReturn()
@@ -53,7 +55,7 @@ class RecordControllerTest {
             )
         )
         val result = mockMvc.perform(
-            get("/v1/record")
+            get(PATH)
                 .param("phoneNumber", "+79879997766")
         )
             .andReturn()
@@ -61,13 +63,13 @@ class RecordControllerTest {
         assertEquals(404, result.response.status)
         assertEquals("Not Found", json["title"].textValue())
         assertEquals("client not found", json["detail"].textValue())
-        assertEquals("/v1/record", json["instance"].textValue())
+        assertEquals("/v1/client/record", json["instance"].textValue())
     }
 
     @Test
     fun createRecord() {
         val result = mockMvc.perform(
-            post("/v1/record/create")
+            post("$PATH/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(buildRecordCreateRequest()))
                 .param("phoneNumber", "+79879997766")

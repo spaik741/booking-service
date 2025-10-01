@@ -20,7 +20,7 @@ class ClientController(
         return ResponseEntity.status(HttpStatus.CREATED).build()
     }
 
-    @GetMapping
+    @GetMapping("/info")
     fun getInfo(@RequestParam("phoneNumber") @NotEmpty phoneNumber: String) =
         ResponseEntity.ok(clientService.findClient(phoneNumber))
 }

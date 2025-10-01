@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/v1/record")
+@RequestMapping("/v1/client/record")
 class RecordController(val recordService: RecordService) {
 
     @GetMapping
