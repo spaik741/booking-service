@@ -2,6 +2,7 @@ package com.bookingservice.service
 
 import com.bookingservice.exception.BookingServiceException
 import com.bookingservice.mapper.RecordMapperImpl
+import com.bookingservice.model.BookRecordResponse
 import com.bookingservice.model.ClientEntity
 import com.bookingservice.model.RecordEntity
 import com.bookingservice.model.dto.RecordClientResponse
@@ -34,6 +35,9 @@ class RecordServiceTest {
     @Mock
     private lateinit var clientRepository: ClientRepository
 
+    @Mock
+    private lateinit var providerClient: ProviderClient
+
     @Spy
     private lateinit var recordMapper: RecordMapperImpl
 
@@ -60,6 +64,9 @@ class RecordServiceTest {
         val record = buildRecordEntity()
         `when`(clientRepository.existsByPhoneNumber("+79879997766")).thenReturn(true)
         `when`(recordRepository.save(record)).thenReturn(record)
+        `when`(providerClient.bookSchedule("Реснички у Иришки", LocalDateTime.of(2025, 8, 8, 10, 0))).thenReturn(
+            buildBookRecordResponse()
+        )
         recordService.createRecord("+79879997766", buildRecordCreateRequest())
         val recordCaptor = ArgumentCaptor.forClass(RecordEntity::class.java)
         verify(recordRepository).save(recordCaptor.capture())
@@ -70,7 +77,12 @@ class RecordServiceTest {
     fun createRecordErrorClient() {
         `when`(clientRepository.existsByPhoneNumber("+79879997766")).thenReturn(false)
         val err =
-            assertThrows<BookingServiceException> { recordService.createRecord("+79879997766", buildRecordCreateRequest()) }
+            assertThrows<BookingServiceException> {
+                recordService.createRecord(
+                    "+79879997766",
+                    buildRecordCreateRequest()
+                )
+            }
         assertEquals("client not found", err.message)
         assertEquals(HttpStatus.NOT_FOUND, err.status)
         verify(recordRepository, times(0)).save(any())
@@ -103,5 +115,7 @@ class RecordServiceTest {
             middleName = "Дмитриеевич",
             createdDate = LocalDateTime.of(2025, 8, 8, 10, 0)
         )
+
+    private fun buildBookRecordResponse() = BookRecordResponse(true, LocalDateTime.of(2025, 8, 8, 10, 0))
 
 }

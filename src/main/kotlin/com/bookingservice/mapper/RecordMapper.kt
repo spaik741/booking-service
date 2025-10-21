@@ -8,6 +8,7 @@ import com.bookingservice.model.dto.RecordInfo
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
 import org.mapstruct.Named
+import java.time.LocalDateTime
 
 @Mapper(componentModel = "spring")
 abstract class RecordMapper {
@@ -29,5 +30,7 @@ abstract class RecordMapper {
     }
 
     @Mapping(target = "phoneNumber", source = "phoneNumber")
-    abstract fun mapToEntity(phoneNumber: String, recordDto: RecordCreateRequest): RecordEntity?
+    @Mapping(target = "companyName", source = "companyName")
+    @Mapping(target = "recordDateTime", source = "recordDateTime")
+    abstract fun mapToEntity(phoneNumber: String, companyName: String, recordDateTime: LocalDateTime): RecordEntity?
 }

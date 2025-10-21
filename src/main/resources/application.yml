@@ -20,6 +20,13 @@ spring:
         max-interval: 2000
         multiplier: 1.1
       label: master
+    openfeign:
+        client:
+          config:
+            default:
+              connect-timeout: 5000
+              read-timeout: 10000
+              logger-level: FULL
 
 management:
   endpoints:
@@ -38,3 +45,16 @@ management:
 
 configserver:
   import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:8089}
+
+
+#feign:
+#  client:
+#    config:
+#      default:
+#        connectTimeout: 5000
+#        readTimeout: 10000
+#        loggerLevel: FULL
+#        retryer:
+#          period: 100
+#          maxPeriod: 1000
+#          maxAttempts: 3

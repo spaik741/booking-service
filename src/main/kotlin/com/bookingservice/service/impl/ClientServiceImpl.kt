@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class ClientServiceImpl(
-    val clientRepository: ClientRepository,
-    val clientMapper: ClientMapper
+    private val clientRepository: ClientRepository,
+    private val clientMapper: ClientMapper
 ) : ClientService {
 
     override fun create(createRequest: ClientCreateRequest) {
